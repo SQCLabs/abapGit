@@ -1204,6 +1204,7 @@ CLASS lcl_git_porcelain IMPLEMENTATION.
           lt_objects TYPE lif_defs=>ty_objects_tt,
           lv_pack    TYPE xstring,
           ls_object  LIKE LINE OF lt_objects,
+          lt_files   TYPE lif_defs=>ty_files_tt,
           ls_commit  TYPE lcl_git_pack=>ty_commit.
 
     FIELD-SYMBOLS: <ls_tree> LIKE LINE OF it_trees,
@@ -1274,6 +1275,15 @@ CLASS lcl_git_porcelain IMPLEMENTATION.
       iv_new         = rv_branch
       iv_branch_name = io_stage->get_branch_name( )
       iv_pack        = lv_pack ).
+
+* update objects in repo
+    APPEND LINES OF io_repo->get_objects( ) TO lt_objects.
+    io_repo->set_objects( lt_objects ).
+    walk( EXPORTING it_objects = lt_objects
+                    iv_sha1 = ls_commit-tree
+                    iv_path = '/'
+          CHANGING ct_files = lt_files ).
+    io_repo->set_files_remote( lt_files ).
 
   ENDMETHOD.                    "receive_pack
 

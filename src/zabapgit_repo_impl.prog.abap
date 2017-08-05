@@ -7,12 +7,6 @@
 *----------------------------------------------------------------------*
 CLASS lcl_repo_offline IMPLEMENTATION.
 
-  METHOD set_files_remote.
-
-    mt_remote = it_files.
-
-  ENDMETHOD.
-
 ENDCLASS.                    "lcl_repo_offline IMPLEMENTATION
 
 *----------------------------------------------------------------------*
@@ -65,6 +59,10 @@ CLASS lcl_repo_online IMPLEMENTATION.
     COMMIT WORK AND WAIT.
 
   ENDMETHOD.                    "deserialize
+
+  METHOD set_objects.
+    mt_objects = it_objects.
+  ENDMETHOD.
 
   METHOD reset_status.
     CLEAR mt_status.
@@ -206,11 +204,11 @@ CLASS lcl_repo_online IMPLEMENTATION.
                                        et_updated_files = lt_updated_files ).
 
     IF io_stage->get_branch_sha1( ) = get_sha1_local( ).
+      mv_branch = lv_branch.
 * pushing to the branch currently represented by this repository object
       set( iv_sha1 = lv_branch ).
     ENDIF.
 
-    refresh( ).
     update_local_checksums( lt_updated_files ).
 
     IF lcl_stage_logic=>count( me ) = 0.
@@ -691,6 +689,10 @@ CLASS lcl_repo IMPLEMENTATION.
   METHOD get_key.
     rv_key = ms_data-key.
   ENDMETHOD.                    "get_key
+
+  METHOD set_files_remote.
+    mt_remote = it_files.
+  ENDMETHOD.
 
   METHOD get_name.
 
