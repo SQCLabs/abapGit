@@ -4,54 +4,40 @@ category: getting-started
 order: 10
 ---
 
-## ABAP Report ##
-Copy the [ABAP code](https://raw.githubusercontent.com/larshp/abapGit/build/zabapgit.abap) into new report via SE38 or SE80. To update abapGit to a newer version, replace the code in the report with the most recent.
+## Summary ##
+abapGit exists in 2 flavours: _standalone_ version or _developer_ version. 
 
-To use the online feature, SSL must be setup. Offline projects will work behind firewalls and without SSL.
+  * The standalone version is targeted at users. It consist of one (huge) program which contains all the needed code. You run the standalone version in transaction `SE38`, executing the program you created.
+  * The developer version is targeted at developers contributing to the abapGit codebase. It consists of all the ABAP programs/classes/interfaces/etc. of the abapGit project. You run the developer version with transaction `ZABAPGIT`.
 
-## STRUST/SSL setup(online projects only) ##
+## Prerequisites ##
+abapGit requires SAP BASIS version 702 or higher.
 
-##### Option A - Chrome #####
+## Install standalone version ##
+1. Download the [ABAP code](https://raw.githubusercontent.com/abapGit/build/master/zabapgit.abap)(right click -> save-as) to a file. 
+2. Via `SE38` or `SE80`, create a new report named `ZABAPGIT_STANDALONE` (formerly `ZABAPGIT_FULL`). NB: Don't use the name `ZABAPGIT` if you plan to install the developer version.
+3. In source code change mode, upload the code from the file using Utilities -> More Utilities -> Upload/Download -> Upload
+4. Activate
 
-1. On chrome, go to https://github.com
-2. Click on the locker near the address bar, then click on "Details"
-3. The developer tools will open at the Security tab. Click on "View certificate"
-4. Go to the "Details" tab and click on "Copy to file..." to export to a .CER file
-5. Open the "Certification path" tab and navigate to the parent node at the tree, do this until the root
+Typically, abapGit will only be used in the development system, so it can be installed in a local `$` package (e.g.  `$ZABAPGIT`).
 
+Now you can use abapGit by executing the report in transaction `SE38`.
 
-##### Option B - Firefox #####
-1. Use Firefox to go to https://github.com
-2. Click on the lock icon and then "More Information ..." and there "View Certificate"
-3. Switch to the Details Tab and choose the first certificate of the tree and click Export
-4. Do the same for the next certificate in the tree
+## Setup SSL ##
+To use the online feature, [SSL must be setup](guide-ssl-setup.html). Offline projects will work behind firewalls and without SSL.
 
-##### Option C #####
-1. Goto github, find the certificate that it is using
-2. Download certificate from https://www.digicert.com/digicert-root-certificates.htm
+## Install developer version ##
+1. Download latest version
+   1. Go to https://github.com/larshp/abapGit/
+   2. Select **Code** > **Download ZIP**
+   3. Save file
+2. Connect to SAP in language **EN**
+3. In transaction `SE38`, run program `ZABAPGIT_STANDALONE`
+4. Select **+ Offline**
+5. Select existing package or create new package (eg: a local `$` package)
+5. Select **Import <sup>zip</sup>**
+6. Select *abapGit-master.zip* file
+7. Select **Pull <sup>zip</sup>**
+8. Activate
 
-##### Then continue here #####
-1. Install the certificates in STRUST transaction:
-* Click on the Change button
-* Open "SSL System Client SSL Client (Anonymous)" folder
-* In the third box, Certificate, click on the bottom-left button "Import certificate" and "Add to certificate list".
-* Upload all the downloaded certificates
-* Save
-
-![](img/strust1.png)
-
-Report [ZABAPGIT_TEST_SSL](https://github.com/larshp/abapGit/wiki/ZABAPGIT_TEST_SSL) can be used to verify that the connection works.
-
-Also see blogs
-* http://scn.sap.com/people/jens.gleichmann/blog/2008/10/31/calling-webservices-from-abap-via-httpsssl-with-pfx-certificates
-* http://scn.sap.com/people/thomas.jung/blog/2004/11/17/bsp-a-developers-journal-part-xiv--consuming-webservices-with-abap
-
-The certificate list should end up looking something like this:
-![](img/strust.png)
-
-## Proxy setup(online projects only) ##
-If your server is behind a proxy, it can be configured under Advanced -> Settings,
-![](img/proxy.png)
-
-## Done ##
-Run report
+Transaction `ZABAPGIT` is now available
